@@ -4,9 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:xConnectTool"
+        xmlns:wpfcontrols="clr-namespace:LoadingIndicators.WPF;assembly=LoadingIndicators.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="xConnect Tool" Height="350" Width="525" ResizeMode="CanMinimize" ToolTip="sadney7@gmail.com" WindowStyle="ThreeDBorderWindow"
+        Background="#141418"
+        Foreground="#EEEEF2"
+        >
+
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="118*"/>
+            <ColumnDefinition Width="401*"/>
+        </Grid.ColumnDefinitions>
+        <Menu x:Name="menu" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="519">
+            <MenuItem x:Name="SettingsMenuItem" Header="Settings">
+                <MenuItem Header="General" Click="GeneralSettings"/>
+            </MenuItem>
+        </Menu>
+
+        <wpfcontrols:LoadingIndicator Grid.Column="0" SpeedRatio="{Binding SpeedRatio}" IsActive="{Binding IsThreeDotsActive}" Style="{DynamicResource LoadingIndicatorThreeDotsStyle}" Margin="0,195,0,0"/>
+        <CheckBox Grid.Row="2" Grid.Column="0" IsChecked="{Binding IsThreeDotsActive}"/>
+
     </Grid>
 </Window>
