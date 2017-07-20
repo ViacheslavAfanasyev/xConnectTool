@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +26,21 @@ namespace xConnectTool
         {
             InitializeComponent();
             this.LoadProgressBar();
+            //xConnectAPI.xConnect.Initialize();
+            RunInitializationXConnectApi();
+
+
+        }
+
+        public static void RunInitializationXConnectApi()
+        {
+            ThreadStart ts = new ThreadStart(StartInitializationXConnectApi);
+            Thread th = new Thread(ts);
+            th.Start();
+        }
+        private static void StartInitializationXConnectApi()
+        {
+            TestConsoleApp.ProgramX.Run();
         }
 
         private void LoadProgressBar()
@@ -37,6 +53,9 @@ namespace xConnectTool
         private void GeneralSettings(object sender, RoutedEventArgs e)
         {
             var generalSettingsWindow = new Windows.GeneralSettings();
+
+
+            
             generalSettingsWindow.ShowDialog();
         }
     }

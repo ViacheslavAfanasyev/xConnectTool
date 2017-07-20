@@ -24,7 +24,7 @@
         </Menu>
 
         <wpfcontrols:LoadingIndicator Grid.Column="0" SpeedRatio="{Binding SpeedRatio}" IsActive="{Binding IsThreeDotsActive}" Style="{DynamicResource LoadingIndicatorThreeDotsStyle}" Margin="0,195,0,0"/>
-        <CheckBox Grid.Row="2" Grid.Column="0" IsChecked="{Binding IsThreeDotsActive}"/>
+
 
     </Grid>
 </Window>
