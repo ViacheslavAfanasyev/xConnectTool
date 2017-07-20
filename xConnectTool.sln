@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xConnectTool", "xConnectTool\xConnectTool.csproj", "{E5865F81-1383-4BBC-AB1D-9B51EEACC136}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFControls", "WPFControls\WPFControls.csproj", "{42E78E69-6129-4B74-B486-08BCFB4E9E79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xConnectAPI", "xConnectAPI\xConnectAPI.csproj", "{57F42FB9-8FB8-44E7-95DC-8B7835748119}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsoleApp", "..\..\TestConsoleApp\TestConsoleApp\TestConsoleApp.csproj", "{2793DE12-6C6C-4B40-9A85-104105B3A176}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{57F42FB9-8FB8-44E7-95DC-8B7835748119}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57F42FB9-8FB8-44E7-95DC-8B7835748119}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57F42FB9-8FB8-44E7-95DC-8B7835748119}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2793DE12-6C6C-4B40-9A85-104105B3A176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2793DE12-6C6C-4B40-9A85-104105B3A176}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2793DE12-6C6C-4B40-9A85-104105B3A176}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2793DE12-6C6C-4B40-9A85-104105B3A176}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

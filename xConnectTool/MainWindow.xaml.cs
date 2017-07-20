@@ -14,6 +14,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using xConnectAPI;
 
 namespace xConnectTool
 {
@@ -25,37 +26,35 @@ namespace xConnectTool
         public MainWindow()
         {
             InitializeComponent();
-            this.LoadProgressBar();
+            LoadingControlXConnect.Visibility = Visibility.Visible;
             //xConnectAPI.xConnect.Initialize();
-            RunInitializationXConnectApi();
+            var result = RunInitializationXConnectApi();
+            if (result==Result.NoConfigFile||result==Result.ConfigFileIsEmpty)
+            {
+                OpenGeneralSettingsWindow();
+            }
 
-
+            //LoadingControlXConnect.Visibility = Visibility.Hidden;
         }
 
-        public static void RunInitializationXConnectApi()
+        //public static Result RunInitializationXConnectApi()
+        //{
+        //    System.Threading.ThreadStart ts = new System.Threading.ThreadStart(xConnect.Initialize);
+        //    System.Threading.Thread th = new System.Threading.Thread(ts);
+        //    th.Start();
+        //}
+        public static Result RunInitializationXConnectApi()
         {
-            ThreadStart ts = new ThreadStart(StartInitializationXConnectApi);
-            Thread th = new Thread(ts);
-            th.Start();
-        }
-        private static void StartInitializationXConnectApi()
-        {
-            TestConsoleApp.ProgramX.Run();
+            return xConnect.Initialize();
         }
 
-        private void LoadProgressBar()
+    private void GeneralSettings(object sender, RoutedEventArgs e)
         {
-            Duration dur = new Duration(TimeSpan.FromSeconds(1));
-            DoubleAnimation dblani = new DoubleAnimation(100, dur);
-            //ProgressBar.BeginAnimation(ProgressBar.ValueProperty, dblani);
+            OpenGeneralSettingsWindow();
         }
-
-        private void GeneralSettings(object sender, RoutedEventArgs e)
+        private void OpenGeneralSettingsWindow()
         {
             var generalSettingsWindow = new Windows.GeneralSettings();
-
-
-            
             generalSettingsWindow.ShowDialog();
         }
     }

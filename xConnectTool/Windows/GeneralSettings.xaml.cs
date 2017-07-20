@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using xConnectAPI;
 
 namespace xConnectTool.Windows
 {
@@ -65,7 +66,7 @@ namespace xConnectTool.Windows
 
         private void ChangeXConnectUrl(string url)
         {
-            xConnect.xConnectUrl = xConnectSiteInput.Text;
+            xConnectAPI.xConnect.xConnectUrl = xConnectSiteInput.Text;
         }
         private void MakeWarning(string msg)
         {
