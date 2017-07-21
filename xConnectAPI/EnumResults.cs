@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace xConnectAPI
 {
-    public enum Result : long { Good, NoConfigFile, ConfigFileIsEmpty}
+    public enum Result : long { NotDefined, StartInitialization, Good, NoConfigFile, ConfigFileIsEmpty, ErrorDuringInitization, Ready}
 
 }

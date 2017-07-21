@@ -35,6 +35,18 @@ namespace xConnectAPI
             while (true)
             {
                 System.Threading.Thread.Sleep(1000);
+                if (ResultStatus == Result.NotDefined)
+                {
+                    Status = "No to say";
+                    StatusColor = "White";
+                    continue;
+                }
+                if (ResultStatus == Result.StartInitialization)
+                {
+                    Status = "Initialization is started";
+                    StatusColor = "White";
+                    continue;
+                }
                 if (string.IsNullOrEmpty(xConnectUrl))
                 {
                     Status = "xConnectUrl hasn't been set.";
@@ -51,13 +63,27 @@ namespace xConnectAPI
 
                 if (Configuration == null)
                 {
-                    Status = string.Format("[{0}]:Configuration hasn't initialized yet.", xConnectUrl);
+                    Status = string.Format("[{0}]: Configuration hasn't initialized yet.", xConnectUrl);
                     StatusColor = "Red";
                     continue;
                 }
-                else
+
+                if (ResultStatus == Result.ErrorDuringInitization)
                 {
-                    Status = string.Format("[{0}]:Configuration is initialized.", xConnectUrl);
+                    Status = string.Format("[{0}]: Error has occured during initialization. {1}", xConnectUrl, StatusLastErrorMessage);
+                    StatusColor = "Red";
+                    continue;
+                }
+
+                if (ResultStatus == Result.Good)
+                {
+                    Status = string.Format("[{0}]: Configuration is initialized.", xConnectUrl);
+                    StatusColor = "Lime";
+                    continue;
+                }
+                if (ResultStatus == Result.Ready)
+                {
+                    Status = string.Format("[{0}]: Ready", xConnectUrl);
                     StatusColor = "Lime";
                     continue;
                 }
@@ -71,7 +97,15 @@ namespace xConnectAPI
         private static string cleintThumbprint;
         private static string status;
         private static string statusColor;
+        private static string statusLastErrorMessage;
         private static string configFilePath;
+        private static Result resultStatus;
+
+        public static Result ResultStatus
+        {
+            get { return resultStatus; }
+            set { resultStatus = value; }
+        }
 
         public static string xConnectUrl
         {
@@ -82,6 +116,21 @@ namespace xConnectAPI
             set
             {
                 xconnectUrl = value;
+            }
+        }
+        public static string CleintThumbprint
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(cleintThumbprint))
+                {
+                    cleintThumbprint = ResolveClientThumPrint();
+                }
+                return cleintThumbprint;
+            }
+            set
+            {
+                cleintThumbprint = value;
             }
         }
 
@@ -113,6 +162,22 @@ namespace xConnectAPI
 
             }
         }
+
+        public static string StatusLastErrorMessage
+        {
+            get
+            {
+                return statusLastErrorMessage;
+            }
+            set
+            {
+                statusLastErrorMessage = value;
+                //NotifyStaticPropertyChanged("Status");
+                NotifyStaticPropertyChanged();
+
+            }
+        }
+
         public static event PropertyChangedEventHandler StaticPropertyChanged;
 
         private static void NotifyStaticPropertyChanged([CallerMemberName] string name = null)
@@ -120,6 +185,10 @@ namespace xConnectAPI
             StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(name));
         }
 
+        public static void SumbitConfiguration()
+        {
+            xConnectAPI.Configuration.WriteConfigurationToFile(configFilePath, xConnectUrl, CleintThumbprint);
+        }
 
 
 
@@ -139,26 +208,37 @@ namespace xConnectAPI
         {
             System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
+            var xconnectCollection = config.ConnectionStrings.ConnectionStrings["xconnect.collection"];
+            var xconnectCollectionCertificate = config.ConnectionStrings.ConnectionStrings["xconnect.collection.certificate"];
+
+            config.ConnectionStrings.ConnectionStrings.Remove("xconnect.collection");
+            config.ConnectionStrings.ConnectionStrings.Remove("xconnect.collection.certificate");
+
+
             var connectionStringXCoonectC = "StoreName=My;StoreLocation=LocalMachine;FindType=FindByThumbprint;FindValue=" + clientThumPrint;
             var cssXCoonectCS = new ConnectionStringSettings("xconnect.collection.certificate", connectionStringXCoonectC);
+
             config.ConnectionStrings.ConnectionStrings.Add(cssXCoonectCS);
+
 
             var connectionStringXCoonect = xConnectUrl;
             var cssXCoonect = new ConnectionStringSettings("xconnect.collection", connectionStringXCoonect);
+
+
             config.ConnectionStrings.ConnectionStrings.Add(cssXCoonect);
 
             ConfigurationManager.RefreshSection("connectionStrings");
             config.Save(ConfigurationSaveMode.Modified);
         }
 
-        public static Result Initialize()
+        public static void Initialize()
         {
+            ResultStatus = Result.StartInitialization;
             //await InitializeXConnect().ConfigureAwait(true).GetAwaiter().GetResult();
-
-            return InitializeXConnect();
+            InitializeXConnect();
         }
 
-        private static Result InitializeXConnect()
+        private static void InitializeXConnect()
         {
             //Zaglushka
             //System.Threading.Thread.Sleep(5000);
@@ -172,21 +252,22 @@ namespace xConnectAPI
             //System.Threading.Thread.Sleep(5000);
 
 
-            
-            
+
+
             //
 
             xConnectUrl = ResolveXConnectUrl();
 
-            if (xConnectUrl==null)
+            if (xConnectUrl == null)
             {
-                return Result.NoConfigFile;
+                ResultStatus = Result.NoConfigFile;
+                return;
             }
             if (xConnectUrl == string.Empty)
             {
-                return Result.ConfigFileIsEmpty;
+                ResultStatus = Result.ConfigFileIsEmpty;
             }
-                return Result.Good;
+
 
             cleintThumbprint = ResolveClientThumPrint();
             InitializeConnectionStrings(xConnectUrl, cleintThumbprint);
@@ -206,48 +287,63 @@ namespace xConnectAPI
             var xConnectConfiguration = new Sitecore.XConnect.Client.Configuration.SitecoreXConnectClientConfiguration(clientModel, "xconnect.collection", "xconnect.collection", "xconnect.collection");
 
 
-            var handlers = xConnect.GetConnectionRequestHandlers("97B7D2CF30E986BB14B7655137771C2DF6B14EB0", "xconnect.collection.certificate");
-            Configuration = xConnect.GetXConnectClientConfiguration(clientModel, new Uri("https://SitecoreXConnectLocal"), new Uri("https://SitecoreXConnectLocal"), handlers, handlers);
+            var handlers = xConnect.GetConnectionRequestHandlers(CleintThumbprint, "xconnect.collection.certificate");
+            Configuration = xConnect.GetXConnectClientConfiguration(clientModel, new Uri(xConnectUrl), new Uri(xConnectUrl), handlers, handlers);
 
-            InitalizeConfiguration().ConfigureAwait(false).GetAwaiter().GetResult();
+            try
+            {
+                InitalizeConfiguration().ConfigureAwait(false).GetAwaiter().GetResult();
+            }
+            catch(Exception ex)
+            {
+                ResultStatus = Result.ErrorDuringInitization;
+                statusLastErrorMessage = ex.Message;
+                return;
+            }
+            ResultStatus = Result.Good;
+            //CreateUser();
+            ResultStatus = Result.Ready;
+        }
 
-            //using (var client = new XConnectClient(cfg))
-            //{
-            //    try
-            //    {
-            //        // Identifier for a 'known' contact
-            //        var identifier = new ContactIdentifier[]
-            //        {
-            //                new ContactIdentifier("twitter", "myrtlemcmuffin" + Guid.NewGuid().ToString("N"), ContactIdentifierType.Known)
-            //        };
+        private static async Task CreateUser()
+        {
+            using (var client = new XConnectClient(Configuration))
+            {
+                try
+                {
+                    // Identifier for a 'known' contact
+                    var identifier = new ContactIdentifier[]
+                    {
+                            new ContactIdentifier("twitter", "myrtlemcmuffin" + Guid.NewGuid().ToString("N"), ContactIdentifierType.Known)
+                    };
 
-            //        // Print out the identifier that is going to be used
-            //        Console.WriteLine("Identifier:" + identifier[0].Identifier);
+                    // Print out the identifier that is going to be used
+                    Console.WriteLine("Identifier:" + identifier[0].Identifier);
 
-            //        // Create a new contact with the identifier
-            //        Contact knownContact = new Contact(identifier);
+                    // Create a new contact with the identifier
+                    Contact knownContact = new Contact(identifier);
 
-            //        client.AddContact(knownContact);
+                    client.AddContact(knownContact);
 
-            //        // Submit contact and interaction - a total of two operations
-            //        await client.SubmitAsync();
+                    // Submit contact and interaction - a total of two operations
+                    await client.SubmitAsync();
 
-            //        // Get the last batch that was executed
-            //        var operations = client.LastBatch;
+                    // Get the last batch that was executed
+                    var operations = client.LastBatch;
 
-            //        Console.WriteLine("RESULTS...");
+                    Console.WriteLine("RESULTS...");
 
-            //        // Loop through operations and check status
-            //        foreach (var operation in operations)
-            //        {
-            //            Console.WriteLine(operation.OperationType + operation.Target.GetType().ToString() + " Operation: " + operation.Status);
-            //        }
-            //    }
-            //    catch (XdbExecutionException ex)
-            //    {
-            //        // Deal with exception
-            //    }
-            //}
+                    // Loop through operations and check status
+                    foreach (var operation in operations)
+                    {
+                        Console.WriteLine(operation.OperationType + operation.Target.GetType().ToString() + " Operation: " + operation.Status);
+                    }
+                }
+                catch (XdbExecutionException ex)
+                {
+                    // Deal with exception
+                }
+            }
 
         }
 
@@ -258,13 +354,23 @@ namespace xConnectAPI
 
         private static string ResolveXConnectUrl()
         {
-            string result = xConnectAPI.Configuration.ReadConfiguration(configFilePath);
-            return result;
+            var cfg = xConnectAPI.Configuration.ReadConfiguration(configFilePath);
+            if (cfg == null)
+            {
+                return null;
+            }
+            return cfg.xConnectUrl;
         }
         private static string ResolveClientThumPrint()
         {
-            throw new NotImplementedException();
-            return cleintThumbprint;
+            //throw new NotImplementedException();
+            //cleintThumbprint = "97B7D2CF30E986BB14B7655137771C2DF6B14EB0";
+            var cfg = xConnectAPI.Configuration.ReadConfiguration(configFilePath);
+            if (cfg == null)
+            {
+                return null;
+            }
+            return cfg.CertificateThumPrint;
         }
 
 

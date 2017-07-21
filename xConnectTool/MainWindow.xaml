@@ -7,7 +7,7 @@
         xmlns:wpfcontrols="clr-namespace:LoadingIndicators.WPF;assembly=LoadingIndicators.WPF"
         xmlns:xConnectAPI="clr-namespace:xConnectAPI;assembly=xConnectAPI" x:Class="xConnectTool.MainWindow"
         mc:Ignorable="d"
-        Title="xConnect Tool" Height="350" Width="525" ResizeMode="CanResize" ToolTip="sadney7@gmail.com" WindowStyle="ThreeDBorderWindow"
+        Title="xConnect Tool" Height="380" Width="525" ResizeMode="NoResize" ToolTip="sadney7@gmail.com" WindowStyle="ThreeDBorderWindow"
         Background="#141418"
         Foreground="#EEEEF2"
         >
@@ -26,11 +26,11 @@
         <wpfcontrols:LoadingIndicator x:Name="LoadingControlXConnect" SpeedRatio="{Binding SpeedRatio}" IsActive="{Binding IsThreeDotsActive}" Style="{DynamicResource LoadingIndicatorThreeDotsStyle}" Margin="69,95,66,64" Height="162" Width="384"/>
         <!--<wpfcontrols:LoadingIndicator Grid.Column="0" SpeedRatio="{Binding SpeedRatio}" IsActive="{Binding IsThreeDotsActive}" Style="{StaticResource LoadingIndicatorWaveStyleKey}" Margin="0,195,0,0"/>-->
 
-        <Label x:Name="label" HorizontalAlignment="Left" Margin="0,279,0,0" VerticalAlignment="Top" Width="519" Foreground="{Binding Path=StatusColor}" Background="#FF434364" Height="42" Content="{Binding Path=Status}">
-            <Label.DataContext>
+        <TextBlock  x:Name="label" TextWrapping="WrapWithOverflow" HorizontalAlignment="Left" Margin="0,279,0,0" VerticalAlignment="Top" Width="507" Foreground="{Binding Path=StatusColor}" Background="#FF434364" Height="70" Text="{Binding Path=Status}">
+            <TextBlock.DataContext>
                 <xConnectAPI:xConnect/>
-            </Label.DataContext>
-        </Label>
+            </TextBlock.DataContext>
+        </TextBlock>
 
 
 

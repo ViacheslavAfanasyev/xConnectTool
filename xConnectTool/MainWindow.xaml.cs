@@ -28,11 +28,11 @@ namespace xConnectTool
             InitializeComponent();
             LoadingControlXConnect.Visibility = Visibility.Visible;
             //xConnectAPI.xConnect.Initialize();
-            var result = RunInitializationXConnectApi();
-            if (result==Result.NoConfigFile||result==Result.ConfigFileIsEmpty)
-            {
-                OpenGeneralSettingsWindow();
-            }
+            RunInitializationXConnectApi();
+            //if (ShowActivated==Result.NoConfigFile||result==Result.ConfigFileIsEmpty)
+            //{
+            //    OpenGeneralSettingsWindow();
+            //}
 
             //LoadingControlXConnect.Visibility = Visibility.Hidden;
         }
@@ -43,9 +43,11 @@ namespace xConnectTool
         //    System.Threading.Thread th = new System.Threading.Thread(ts);
         //    th.Start();
         //}
-        public static Result RunInitializationXConnectApi()
+        public static void RunInitializationXConnectApi()
         {
-            return xConnect.Initialize();
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(xConnect.Initialize);
+            System.Threading.Thread th = new System.Threading.Thread(ts);
+            th.Start();
         }
 
     private void GeneralSettings(object sender, RoutedEventArgs e)

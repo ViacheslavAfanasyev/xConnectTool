@@ -35,28 +35,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
-      <HintPath>C:\Users\Slava\Desktop\bin\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.ContentTesting.Model">
-      <HintPath>C:\Users\Slava\Desktop\bin\Sitecore.ContentTesting.Model.dll</HintPath>
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Sitecore.ContentTesting.Model.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Kernel">
-      <HintPath>C:\Users\Slava\Desktop\bin\Sitecore.Kernel.dll</HintPath>
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Sitecore.Kernel.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.XConnect">
-      <HintPath>C:\Users\Slava\Desktop\bin\Sitecore.XConnect.dll</HintPath>
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Sitecore.XConnect.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.XConnect.Client">
-      <HintPath>C:\Users\Slava\Desktop\bin\Sitecore.XConnect.Client.dll</HintPath>
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Sitecore.XConnect.Client.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.XConnect.Client.Configuration">
-      <HintPath>C:\Users\Slava\Desktop\bin\Sitecore.XConnect.Client.Configuration.dll</HintPath>
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Sitecore.XConnect.Client.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.XConnect.Collection.Model">
-      <HintPath>C:\Users\Slava\Desktop\bin\Sitecore.XConnect.Collection.Model.dll</HintPath>
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Sitecore.XConnect.Collection.Model.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Xdb.Common.Web">
-      <HintPath>C:\Users\Slava\Desktop\bin\Sitecore.Xdb.Common.Web.dll</HintPath>
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Sitecore.Xdb.Common.Web.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Certificates.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="EnumResults.cs" />
     <Compile Include="StaticModelConfiguration.cs" />

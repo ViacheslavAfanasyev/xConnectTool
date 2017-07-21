@@ -1,15 +1,20 @@
-﻿<Window x:Class="xConnectTool.Windows.GeneralSettings"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:xConnectTool.Windows"
+        xmlns:xConnectAPI="clr-namespace:xConnectAPI;assembly=xConnectAPI" x:Class="xConnectTool.Windows.GeneralSettings"
         mc:Ignorable="d"
-        Title="General settings" Height="168" Width="300" ResizeMode="NoResize">
+        Title="General settings" Height="232.8" Width="338.4" ResizeMode="NoResize" Unloaded="Window_Unloaded"
+        Background="#141418"
+        Foreground="#EEEEF2">
     <Grid Height="135" VerticalAlignment="Top">
-        <TextBox x:Name="xConnectSiteInput" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="202" ToolTip="https://xConnect/" TextChanged="xConnectSiteInput_TextChanged" />
-        <Button x:Name="xConnectApply" Content="Apply" HorizontalAlignment="Left" Margin="217,36,0,0" VerticalAlignment="Top" Width="65" Height="23" Click="xConnectApply_Click"/>
-        <Label x:Name="GeneralSettingsLabel" Content="xConnect site" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="InfoLabel" Content="Info_Label" HorizontalAlignment="Left" Margin="8,64,0,0" VerticalAlignment="Top" Foreground="#FFFB0909" IsEnabled="False" Width="274"/>
+        <TextBox x:Name="xConnectSiteInput" Foreground="#141418" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="304" ToolTip="https://xConnect/" TextChanged="xConnectSiteInput_TextChanged" />
+        <Button x:Name="xConnectApply" Foreground="White" Content="Apply" HorizontalAlignment="Left" Margin="249,165,0,-53" VerticalAlignment="Top" Width="65" Height="23" Click="xConnectApply_Click" Background="#FF21488D"/>
+        <Label x:Name="GeneralSettingsLabel" Foreground="White" Content="xConnect site" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="InfoLabel" Foreground="White" Content="Info_Label" HorizontalAlignment="Left" Margin="2,169,0,-60" VerticalAlignment="Top" IsEnabled="False" Width="274"/>
+        <ComboBox Name="CertificateList" Foreground="#141418" HorizontalAlignment="Left" Margin="10,107,0,0" VerticalAlignment="Top" Width="304" SelectionChanged="CertificateList_SelectionChanged" />
+        <Label x:Name="GeneralSettingsLabel_Copy" Foreground="White" Content="Client Certificate" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

@@ -26,6 +26,13 @@ namespace xConnectTool.Windows
             xConnectApply.IsEnabled = false;
             xConnectSiteInput.Text = xConnect.xConnectUrl;
             InfoLabel.Visibility = Visibility.Hidden;
+            CertificateList.ItemsSource = Certificates.CertificatesName;
+            var currentCert = Certificates.CertificatesFromMyStore.Where(x => x.ThumPrint == xConnectAPI.xConnect.CleintThumbprint).FirstOrDefault();
+            if (currentCert!=null)
+            {
+                CertificateList.SelectedValue = Certificates.CertificatesName.Find(x => x == currentCert.Name);
+            }
+
         }
 
         string warningNoHttp = "xConnect site url must start with 'https://'";
@@ -33,6 +40,14 @@ namespace xConnectTool.Windows
         string infoNewSetingIsApplied = "New setting is applied";
 
         private void xConnectSiteInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (xConnectApply.IsEnabled == false)
+            {
+                xConnectApply.IsEnabled = true;
+            }
+        }
+
+        private void CertificateList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (xConnectApply.IsEnabled == false)
             {
@@ -50,6 +65,8 @@ namespace xConnectTool.Windows
                 {
                     this.ChangeXConnectUrl(url.ToLower());
                     this.MakeInfo(this.infoNewSetingIsApplied);
+                    this.ChangeCertificate();
+                    xConnectAPI.xConnect.SumbitConfiguration();
 
                 }
                 else
@@ -62,6 +79,21 @@ namespace xConnectTool.Windows
                 this.MakeWarning(this.warningEmptyOrNull);
             }
             this.ResetControls();
+        }
+
+        private void ChangeCertificate()
+        {
+            var cert = xConnectAPI.Certificates.CertificatesFromMyStore.Where(x => x.Name == CertificateList.SelectedValue.ToString()).FirstOrDefault();
+
+
+           if(cert!=null)
+            {
+                xConnectAPI.xConnect.CleintThumbprint = cert.ThumPrint;
+            }
+           else
+            {
+
+            }
         }
 
         private void ChangeXConnectUrl(string url)
@@ -85,6 +117,13 @@ namespace xConnectTool.Windows
         private void ResetControls()
         {
             xConnectApply.IsEnabled = false;
+        }
+
+        private void Window_Unloaded(object sender, RoutedEventArgs e)
+        {
+            System.Threading.ThreadStart ts = new System.Threading.ThreadStart(xConnect.Initialize);
+            System.Threading.Thread th = new System.Threading.Thread(ts);
+            th.Start();
         }
     }
 }

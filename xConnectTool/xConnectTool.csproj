@@ -36,6 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sitecore.ContentTesting.Model">
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Sitecore.ContentTesting.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.XConnect.Collection.Model">
+      <HintPath>..\..\..\..\..\inetpub\wwwroot\Sitecore9\bin\Sitecore.XConnect.Collection.Model.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Private>True</Private>
     </Reference>

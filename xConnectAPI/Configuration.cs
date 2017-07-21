@@ -3,46 +3,57 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace xConnectAPI
 {
-    public static class Configuration
+    public class Configuration
     {
+        public string xConnectUrl { get; set; }
+        public string CertificateThumPrint { get; set; }
+
         //Read\Write cconfiguration
-        public static string ReadConfiguration(string path)
+        public static Configuration ReadConfiguration(string path)
         {
+            Configuration cfg = new Configuration();
+           
             if (System.IO.File.Exists(path))
             {
-                string result = System.IO.File.ReadAllText(path);
-                if (!string.IsNullOrEmpty(result))
+                using (StreamReader sr = System.IO.File.OpenText(path))
                 {
-                    return result;
+                    string s = String.Empty;
+                    while ((s = sr.ReadLine()) != null)
+                    {
+                       if (s.StartsWith("xConnectUrl="))
+                        {
+                            cfg.xConnectUrl = s.Substring(12);
+                        }
+                       if(s.StartsWith("CertificateThumPrint="))
+                        {
+                            cfg.CertificateThumPrint = s.Substring(21);
+                        }
+                    }
                 }
-                return "";
-            }
+                return cfg;
+             }
             return null;
         }
 
 
-        private static void CreateConfigurationFile()
+        public static void WriteConfigurationToFile(string path, string xConnectUrl, string CleintThumbprint)
         {
-            System.IO.StreamWriter textFile = new System.IO.StreamWriter(@"config.ini");
-            textFile.Close();
-        }
-
-        public static void WriteXConnectUrlToFile(string path, string xconnectUrl)
-        {
-            using (var fileStream = new FileStream(path, FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
+            using (StreamWriter sw = new StreamWriter(fs))
             {
-                byte[] info = new UTF8Encoding(true).GetBytes(xconnectUrl);
-                fileStream.Write(info, 0, info.Length);
-
-                // writing data in bytes already
-                byte[] data = new byte[] { 0x0 };
-                fileStream.Write(data, 0, data.Length);
+                sw.WriteLine("xConnectUrl="+ xConnectUrl);
+                sw.WriteLine("CertificateThumPrint=" + CleintThumbprint);
             }
         }
+
+
     }
+
+
 }
